@@ -930,8 +930,8 @@
 </style>
 <div id="cloud-auth">
  <div class="auth-panel"><h2>Professional Cloud Ledger</h2><p>Sign in to securely access your accounts and transactions.</p>
- <input id="sb-url" placeholder="Supabase Project URL (https://...supabase.co)" autocomplete="url">
- <input id="sb-key" placeholder="Supabase Publishable / anon key">
+ <div id="sb-config-fields"><input id="sb-url" placeholder="Supabase Project URL (https://...supabase.co)" autocomplete="url">
+ <input id="sb-key" placeholder="Supabase Publishable / anon key"></div><button id="sb-change-config" type="button" onclick="toggleCloudConfig()" style="display:none;background:#eaf0f8;color:#173b69">Change Supabase connection</button>
  <input id="sb-email" type="email" placeholder="Email address" autocomplete="email">
  <input id="sb-password" type="password" placeholder="Password" autocomplete="current-password">
  <button onclick="cloudLogin(false)">Sign in</button><button onclick="cloudLogin(true)" style="background:#eaf0f8;color:#173b69">Create account</button>
@@ -943,6 +943,17 @@ let sb=null, sbUser=null;
 const $id=id=>document.getElementById(id);
 $id('sb-url').value=localStorage.getItem('ledger_sb_url')||'';
 $id('sb-key').value=localStorage.getItem('ledger_sb_key')||'';
+function toggleCloudConfig(){
+ const fields=$id('sb-config-fields');
+ fields.hidden=!fields.hidden;
+ fields.style.display=fields.hidden?'none':'block';
+}
+if($id('sb-url').value && $id('sb-key').value){
+ $id('sb-config-fields').hidden=true;
+ $id('sb-config-fields').style.display='none';
+ $id('sb-change-config').style.display='block';
+}
+
 function cloudClient(){
  const url=$id('sb-url').value.trim(),key=$id('sb-key').value.trim();
  if(!/^https:\/\/[a-z0-9-]+\.supabase\.co\/?$/.test(url))throw Error('Enter a valid Supabase project URL.');
